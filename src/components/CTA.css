@@ -1,0 +1,49 @@
+.cta {
+  position: relative;
+  background: var(--color-primary);
+  color: white;
+  overflow: hidden;
+}
+
+.cta-bg-shape {
+  position: absolute;
+  top: 50%;
+  right: -10%;
+  transform: translateY(-50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 122, 255, 0.4) 0%, rgba(10,37,88,0) 70%);
+  pointer-events: none;
+}
+
+.cta-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-content {
+  max-width: 600px;
+}
+
+.cta-content h2 {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-content p {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.8);
+}
+
+@media (max-width: 768px) {
+  .cta-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+  }
+}

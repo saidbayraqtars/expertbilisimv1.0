@@ -29,7 +29,7 @@ export const products = [
     category: "Dijital Servisler",
     shortDescription: "e-Fatura, e-Arşiv, e-İrsaliye ve e-Defter çözümleriyle dijital dönüşümünüzü hızlı ve yasal güvenceyle tamamlayın.",
     fullDescription: "Gelir İdaresi Başkanlığı (GİB) standartlarına tam uyumlu e-Fatura, e-Defter, e-Arşiv ve e-İrsaliye çözümlerimizle, kağıt masraflarından kurtulun ve resmi evrak operasyonlarınızı tek tuşla, hata payı olmadan yönetin.",
-    features: ["e-Fatura Kesme", "e-Defter Gönderimi", "e-Arşiv Fatura", "GİB Entegrasyonlu"]
+    features: ["e-Fatura Kesme", "e-Defter Gönderimi", "e-Arşiv Fatura", "GİB Entegrasyonu"]
   },
   {
     id: "vepos",

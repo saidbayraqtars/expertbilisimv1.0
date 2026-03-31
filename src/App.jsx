@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
+import ScrollToTopButton from './components/ScrollToTop';
 import Home from './pages/Home';
 import Kurumsal from './pages/Kurumsal';
 import Urunler from './pages/Urunler';
@@ -9,24 +11,25 @@ import Hizmetler from './pages/Hizmetler';
 import Iletisim from './pages/Iletisim';
 import { useEffect } from 'react';
 
+// Layout wrapper - no extra padding on home page (hero is full viewport)
 const Layout = ({ children }) => {
   const location = useLocation();
   const isHome = location.pathname === '/';
-  
+
   return (
-    <main style={{ minHeight: '80vh', paddingTop: isHome ? '0' : '100px' }}>
+    <main style={{ minHeight: '80vh', paddingTop: isHome ? '0' : '0' }}>
       {children}
     </main>
   );
 };
 
 function App() {
-  // Global scroll reveal logic setup for page changes
+  // Global scroll reveal logic
   useEffect(() => {
     const revealFunction = () => {
-      const reveals = document.querySelectorAll('.reveal');
+      const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
       const windowHeight = window.innerHeight;
-      const elementVisible = 50; // trigger sooner in multi-page
+      const elementVisible = 50;
 
       reveals.forEach((element) => {
         const elementTop = element.getBoundingClientRect().top;
@@ -37,9 +40,8 @@ function App() {
     };
 
     window.addEventListener('scroll', revealFunction);
-    revealFunction(); // manual trigger
-    
-    // observe DOM changes to trigger reveal automatically on route changes
+    revealFunction(); // initial trigger
+
     const observer = new MutationObserver(revealFunction);
     observer.observe(document.body, { childList: true, subtree: true });
 
@@ -63,6 +65,8 @@ function App() {
         </Routes>
       </Layout>
       <Footer />
+      <WhatsAppButton />
+      <ScrollToTopButton />
     </Router>
   );
 }

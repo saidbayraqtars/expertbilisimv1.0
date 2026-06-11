@@ -1,1 +1,87 @@
-/* PageBanner styles are in index.css .page-banner */
+/* ── Page banner ── */
+.banner {
+  position: relative;
+  background: var(--ink-950);
+  padding: 168px 0 72px;
+  overflow: hidden;
+}
+
+.banner__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.banner__glow {
+  position: absolute;
+  top: -300px;
+  right: -100px;
+  width: 640px;
+  height: 640px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(28, 178, 133, 0.18) 0%, transparent 65%);
+  filter: blur(70px);
+}
+
+.banner__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 90% at 50% 0%, #000 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 90% at 50% 0%, #000 20%, transparent 80%);
+}
+
+.banner__inner {
+  position: relative;
+}
+
+.banner__crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--ink-border);
+  font-size: 0.84rem;
+  margin-bottom: 22px;
+}
+
+.banner__crumb a {
+  color: var(--d-mute);
+}
+
+.banner__crumb a:hover {
+  color: #fff;
+}
+
+.banner__crumb svg {
+  font-size: 0.55rem;
+  color: var(--d-mute);
+}
+
+.banner__crumb span {
+  color: var(--brand-300);
+  font-weight: 500;
+}
+
+.banner h1 {
+  color: #fff;
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+}
+
+.banner__sub {
+  margin-top: 14px;
+  max-width: 62ch;
+  font-size: 1.06rem;
+  color: var(--d-body);
+}
+
+@media (max-width: 768px) {
+  .banner {
+    padding: 136px 0 56px;
+  }
+}

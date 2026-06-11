@@ -1,35 +1,38 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { products } from '../data/products';
+import { products, categories } from '../data/products';
+import { productIcons } from '../data/productIcons';
 import './Solutions.css';
-import { FaChevronRight } from 'react-icons/fa';
-
-const categories = ['Tümü', ...new Set(products.map(p => p.category))];
+import { FaArrowRight } from 'react-icons/fa';
 
 const Solutions = ({ showAll = false, limit = 6 }) => {
   const [activeCategory, setActiveCategory] = useState('Tümü');
 
   const filtered = activeCategory === 'Tümü'
     ? products
-    : products.filter(p => p.category === activeCategory);
+    : products.filter((p) => p.category === activeCategory);
 
   const displayed = showAll ? filtered : filtered.slice(0, limit);
 
   return (
-    <section id="cozumler" className="solutions section">
+    <section className="solutions section">
       <div className="container">
-        <div className="section-header reveal">
-          <span className="section-label">Çözümlerimiz</span>
-          <h2>Sektörel Çözümler <span className="text-accent">Üretiyoruz</span></h2>
-          <p>İşimizin merkezinde sizin varlığınız ve ihtiyaçlarınız bulunuyor. Çalışmalarımızın odak noktasında sizin memnuniyetiniz var.</p>
+        <div className="section-head center reveal">
+          <span className="eyebrow">Ürünlerimiz</span>
+          <h2>Her sektöre uygun <span className="text-grad">Vega çözümü</span></h2>
+          <p>
+            Marketten restorana, üretimden saha satışına — işletmenizin ölçeğine ve
+            sektörüne göre doğru yazılımı birlikte seçelim.
+          </p>
         </div>
 
-        {/* Category Filter Tabs */}
-        <div className="solutions-tabs reveal">
-          {categories.map(cat => (
+        <div className="solutions__tabs reveal" role="tablist" aria-label="Ürün kategorileri">
+          {categories.map((cat) => (
             <button
               key={cat}
-              className={`solutions-tab ${activeCategory === cat ? 'active' : ''}`}
+              role="tab"
+              aria-selected={activeCategory === cat}
+              className={`solutions__tab ${activeCategory === cat ? 'solutions__tab--on' : ''}`}
               onClick={() => setActiveCategory(cat)}
             >
               {cat}
@@ -37,22 +40,24 @@ const Solutions = ({ showAll = false, limit = 6 }) => {
           ))}
         </div>
 
-        {/* Product Grid */}
-        <div className="solutions-grid">
-          {displayed.map((product, index) => (
+        <div className="solutions__grid">
+          {displayed.map((p, i) => (
             <Link
-              to={`/urunler/${product.id}`}
-              className={`solution-card reveal delay-${index % 3}`}
-              key={product.id}
+              to={`/urunler/${p.id}`}
+              className={`product-card reveal delay-${i % 3}`}
+              key={p.id}
+              style={{ '--accent': p.accent }}
             >
-              <div className="solution-card-img" style={{ background: product.gradient }}>
-                <span className="solution-card-category">{product.category}</span>
-                <h3 className="solution-card-title">{product.name}</h3>
+              <div className="product-card__top">
+                <span className="product-card__icon">{productIcons[p.icon]}</span>
+                <span className="product-card__cat">{p.category}</span>
               </div>
-              <div className="solution-card-body">
-                <p>{product.shortDescription}</p>
-                <span className="btn-link">
-                  Detaylı İncele <FaChevronRight />
+              <h3>{p.name}</h3>
+              <p>{p.shortDescription}</p>
+              <div className="product-card__foot">
+                <span className="product-card__count">{p.features.length} temel özellik</span>
+                <span className="product-card__go">
+                  İncele <FaArrowRight />
                 </span>
               </div>
             </Link>
@@ -60,9 +65,9 @@ const Solutions = ({ showAll = false, limit = 6 }) => {
         </div>
 
         {!showAll && (
-          <div className="solutions-more reveal">
-            <Link to="/urunler" className="btn btn-outline-dark btn-lg btn-pill">
-              Tüm Ürünleri Gör <FaChevronRight />
+          <div className="solutions__more reveal">
+            <Link to="/urunler" className="btn btn-outline btn-lg">
+              Tüm Ürünleri Gör <FaArrowRight />
             </Link>
           </div>
         )}

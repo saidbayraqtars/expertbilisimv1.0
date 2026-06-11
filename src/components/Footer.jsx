@@ -2,99 +2,82 @@ import { Link } from 'react-router-dom';
 import './Footer.css';
 import {
   FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube,
-  FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock,
-  FaArrowRight
+  FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock, FaArrowRight,
 } from 'react-icons/fa';
+
+const productLinks = [
+  { name: 'Vega Win ERP', to: '/urunler/vega-win-erp' },
+  { name: 'Arctos Hızlı Satış', to: '/urunler/arctos' },
+  { name: 'Şefim Restoran', to: '/urunler/sefim' },
+  { name: 'e-Dönüşüm Çözümleri', to: '/urunler/e-donusum' },
+  { name: 'Vega Smart', to: '/urunler/vega-smart' },
+  { name: 'Vega Cloud9', to: '/urunler/vega-cloud9' },
+];
+
+const companyLinks = [
+  { name: 'Kurumsal', to: '/kurumsal' },
+  { name: 'Ürünlerimiz', to: '/urunler' },
+  { name: 'Hizmetlerimiz', to: '/hizmetler' },
+  { name: 'İletişim', to: '/iletisim' },
+];
 
 const Footer = () => {
   return (
     <footer className="footer">
-      <div className="container footer-grid">
-        {/* Col 1: Company Info */}
-        <div className="footer-about">
-          <Link to="/" className="logo footer-logo">
-            <span className="logo-text text-white">Expert<span className="logo-accent">Bilişim</span></span>
+      <div className="container footer__top">
+        <div className="footer__brand">
+          <Link to="/" className="footer__logo">
+            <span className="footer__logo-mark">EB</span>
+            <span className="footer__logo-text">Expert<em>Bilişim</em></span>
           </Link>
           <p>
-            Vega Yazılım Samsun Bölge Temsilcisi olarak bölgedeki işletmelere kurumsal muhasebe, ERP, perakende ve restoran yazılım çözümleri sunuyoruz.
+            Vega Yazılım Samsun Bölge Temsilcisi. ERP, muhasebe, perakende, restoran ve
+            e-dönüşüm çözümlerinde kurulumdan desteğe uçtan uca hizmet.
           </p>
-          <div className="footer-hours">
-            <div className="footer-hour-item">
-              <FaClock />
-              <span>Pzt - Cuma: 09:00 - 18:00</span>
-            </div>
-            <div className="footer-hour-item">
-              <FaClock />
-              <span>Cumartesi: 09:00 - 15:00</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Col 2: Quick Links */}
-        <div className="footer-links">
-          <h3>Hızlı Bağlantılar</h3>
-          <ul>
-            <li><Link to="/kurumsal">Hakkımızda</Link></li>
-            <li><Link to="/urunler">Ürünlerimiz</Link></li>
-            <li><Link to="/hizmetler">Hizmetlerimiz</Link></li>
-            <li><Link to="/iletisim">İletişim</Link></li>
-          </ul>
-        </div>
-
-        {/* Col 3: Contact */}
-        <div className="footer-contact-col">
-          <h3>İletişim Bilgileri</h3>
-          <ul className="contact-info">
-            <li>
-              <FaMapMarkerAlt />
-              <span>Samsun Merkez,<br />Türkiye</span>
-            </li>
-            <li>
-              <FaPhoneAlt />
-              <span>0 850 XXX XX XX</span>
-            </li>
-            <li>
-              <FaEnvelope />
-              <span>info@expertbilisim.com.tr</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Col 4: Demo & Support */}
-        <div className="footer-cta-col">
-          <h3>Demo & Destek Talep</h3>
-          <p>
-            İşletmenizin ihtiyacı olan VEGA yazılımı ile sizi tanıştıralım. Size en yakın iş ortağı olarak gerekli sunumları yapalım.
-          </p>
-          <div className="footer-cta-buttons">
-            <Link to="/iletisim" className="btn btn-red btn-pill footer-btn">
-              <FaArrowRight /> Demo Talebi
-            </Link>
-            <Link to="/iletisim" className="btn btn-outline btn-pill footer-btn">
-              Destek Talebi
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom bar */}
-      <div className="footer-bottom">
-        <div className="container footer-bottom-inner">
-          <div className="footer-bottom-left">
-            <Link to="/" className="footer-bottom-logo">
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1rem' }}>
-                Expert<span style={{ color: 'var(--color-accent)' }}>Bilişim</span>
-              </span>
-            </Link>
-          </div>
-          <p>© 2026 Expert Bilişim - Vega Yazılım Samsun Bölge Temsilciliği. Tüm Hakları Saklıdır.</p>
-          <div className="footer-social">
-            <span>Bizi Takip Edin</span>
+          <div className="footer__social">
             <a href="#" aria-label="Facebook"><FaFacebookF /></a>
             <a href="#" aria-label="Instagram"><FaInstagram /></a>
             <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
             <a href="#" aria-label="YouTube"><FaYoutube /></a>
           </div>
+        </div>
+
+        <nav className="footer__col" aria-label="Ürünler">
+          <h4>Ürünler</h4>
+          <ul>
+            {productLinks.map((l) => (
+              <li key={l.to}><Link to={l.to}>{l.name}</Link></li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav className="footer__col" aria-label="Kurumsal">
+          <h4>Kurumsal</h4>
+          <ul>
+            {companyLinks.map((l) => (
+              <li key={l.to}><Link to={l.to}>{l.name}</Link></li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="footer__col footer__contact">
+          <h4>İletişim</h4>
+          <ul>
+            <li><FaMapMarkerAlt /> <span>Samsun Merkez, Türkiye</span></li>
+            <li><FaPhoneAlt /> <a href="tel:+908500000000">0 850 XXX XX XX</a></li>
+            <li><FaEnvelope /> <a href="mailto:info@expertbilisim.com.tr">info@expertbilisim.com.tr</a></li>
+            <li><FaClock /> <span>Hafta içi 09:00–18:00 · Cmt 09:00–15:00</span></li>
+          </ul>
+          <Link to="/iletisim" className="btn btn-brand btn-sm footer__cta">
+            Demo Talep Et <FaArrowRight />
+          </Link>
+        </div>
+      </div>
+
+      <div className="footer__bottom">
+        <div className="container footer__bottom-inner">
+          <p>© 2026 Expert Bilişim — Vega Yazılım Samsun Bölge Temsilciliği. Tüm hakları saklıdır.</p>
+          <p className="footer__note">7/24 teknik destek hattımız hizmetinizde.</p>
         </div>
       </div>
     </footer>

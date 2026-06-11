@@ -1,143 +1,165 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import './Navbar.css';
-import { FaBars, FaTimes, FaChevronDown, FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaSearch } from 'react-icons/fa';
+import { products } from '../data/products';
+import { productIcons } from '../data/productIcons';
+import {
+  FaBars, FaTimes, FaChevronDown, FaArrowRight,
+  FaPhoneAlt, FaInstagram, FaLinkedinIn, FaFacebookF,
+} from 'react-icons/fa';
+
+const NAV_PRODUCT_IDS = ['vega-win-erp', 'arctos', 'sefim', 'e-donusum', 'vega-smart', 'vega-cloud9'];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setMobileOpen(false);
-    setDropdownOpen(false);
   }, [location]);
 
-  // Disable body scroll when mobile menu is open
+  const closeMenus = () => {
+    setMobileOpen(false);
+    setMegaOpen(false);
+  };
+
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const isHome = location.pathname === '/';
-
-  const productCategories = [
-    { title: 'ERP & Muhasebe', items: [{ name: 'Vega Win ERP', to: '/urunler/vega-win-erp' }, { name: 'Vega Smart', to: '/urunler/vega-smart' }] },
-    { title: 'Perakende', items: [{ name: 'Arctos Hızlı Satış', to: '/urunler/arctos' }, { name: 'Vepos', to: '/urunler/vepos' }, { name: 'Shopstar', to: '/urunler/shopstar' }] },
-    { title: 'Restoran', items: [{ name: 'Şefim Restoran', to: '/urunler/sefim' }] },
-    { title: 'E-Dönüşüm', items: [{ name: 'e-Dönüşüm Çözümleri', to: '/urunler/e-donusum' }] },
-    { title: 'İnsan Kaynakları', items: [{ name: 'Vega IK', to: '/urunler/vega-ik' }] },
-  ];
+  const megaProducts = NAV_PRODUCT_IDS
+    .map((id) => products.find((p) => p.id === id))
+    .filter(Boolean);
 
   return (
     <>
-      {/* Top Bar */}
-      <div className={`top-bar ${scrolled || !isHome ? 'hidden' : ''}`}>
-        <div className="container top-bar-inner">
-          <div className="top-bar-left">
-            <span>📍 Samsun, Türkiye</span>
-            <span>📞 0 850 XXX XX XX</span>
-          </div>
-          <div className="top-bar-right">
-            <a href="#" aria-label="Facebook"><FaFacebookF /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
-            <a href="#" aria-label="YouTube"><FaYoutube /></a>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navbar */}
-      <header className={`navbar ${scrolled || !isHome ? 'scrolled' : ''}`} id="navbar">
-        <div className="container nav-container">
-          <Link to="/" className="logo">
-            <span className="logo-text">Expert<span className="logo-accent">Bilişim</span></span>
-            <span className="logo-sub">Vega Yazılım Samsun Bölge Temsilciliği</span>
+      <header className={`nav ${scrolled ? 'nav--solid' : ''}`}>
+        <div className="container-wide nav__inner">
+          <Link to="/" className="nav__logo" aria-label="Expert Bilişim ana sayfa">
+            <span className="nav__logo-mark">EB</span>
+            <span className="nav__logo-text">
+              Expert<em>Bilişim</em>
+              <small>Vega Yazılım Bölge Temsilcisi</small>
+            </span>
           </Link>
 
-          <nav className="nav-links">
-            <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Ana Sayfa</Link>
-            <Link to="/kurumsal" className={location.pathname === '/kurumsal' ? 'active' : ''}>Kurumsal</Link>
-            
+          <nav className="nav__links" aria-label="Ana menü">
+            <NavLink to="/" end>Ana Sayfa</NavLink>
+            <NavLink to="/kurumsal">Kurumsal</NavLink>
+
             <div
-              className="nav-dropdown"
-              onMouseEnter={() => setDropdownOpen(true)}
-              onMouseLeave={() => setDropdownOpen(false)}
+              className="nav__mega-wrap"
+              onMouseEnter={() => setMegaOpen(true)}
+              onMouseLeave={() => setMegaOpen(false)}
             >
-              <Link to="/urunler" className={location.pathname.startsWith('/urunler') ? 'active' : ''}>
-                Ürünlerimiz <FaChevronDown className="dropdown-arrow" />
-              </Link>
-              <div className={`mega-menu ${dropdownOpen ? 'open' : ''}`}>
-                <div className="mega-menu-inner">
-                  {productCategories.map((cat) => (
-                    <div className="mega-menu-col" key={cat.title}>
-                      <h4>{cat.title}</h4>
-                      {cat.items.map((item) => (
-                        <Link to={item.to} key={item.name}>{item.name}</Link>
-                      ))}
-                    </div>
+              <NavLink to="/urunler" className={location.pathname.startsWith('/urunler') ? 'active' : ''}>
+                Ürünler <FaChevronDown className="nav__chevron" />
+              </NavLink>
+
+              <div className={`mega ${megaOpen ? 'mega--open' : ''}`} onClick={closeMenus}>
+                <div className="mega__grid">
+                  {megaProducts.map((p) => (
+                    <Link to={`/urunler/${p.id}`} className="mega__item" key={p.id}>
+                      <span className="mega__icon" style={{ color: p.accent, background: `${p.accent}14` }}>
+                        {productIcons[p.icon]}
+                      </span>
+                      <span>
+                        <strong>{p.name}</strong>
+                        <small>{p.category}</small>
+                      </span>
+                    </Link>
                   ))}
                 </div>
-                <div className="mega-menu-footer">
-                  <Link to="/urunler" className="btn-link">Tüm Ürünleri Gör →</Link>
+                <div className="mega__footer">
+                  <span>12 üründen oluşan Vega ailesinin tamamını inceleyin</span>
+                  <Link to="/urunler" className="link-arrow">
+                    Tüm Ürünler <FaArrowRight />
+                  </Link>
                 </div>
               </div>
             </div>
 
-            <Link to="/hizmetler" className={location.pathname === '/hizmetler' ? 'active' : ''}>Hizmetler</Link>
+            <NavLink to="/hizmetler">Hizmetler</NavLink>
+            <NavLink to="/iletisim">İletişim</NavLink>
           </nav>
 
-          <div className="nav-actions">
-            <Link to="/iletisim" className="btn btn-red">Demo Talebi</Link>
-            <Link to="/iletisim" className="btn btn-outline-dark btn-pill nav-support-btn">Destek Talebi</Link>
+          <div className="nav__actions">
+            <a href="tel:+908500000000" className="nav__phone">
+              <FaPhoneAlt />
+              <span>0 850 XXX XX XX</span>
+            </a>
+            <Link to="/iletisim" className="btn btn-brand btn-sm">Demo Talep Et</Link>
           </div>
 
           <button
-            className="mobile-menu-btn"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menüyü aç/kapat"
+            className="nav__burger"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Menüyü aç"
           >
-            {mobileOpen ? <FaTimes /> : <FaBars />}
+            <FaBars />
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
-      <div className={`mobile-overlay ${mobileOpen ? 'open' : ''}`} onClick={() => setMobileOpen(false)} />
-      <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`}>
-        <div className="mobile-menu-header">
-          <span className="logo-text" style={{ color: 'var(--color-primary)' }}>Expert<span className="logo-accent">Bilişim</span></span>
+      {/* Mobile drawer */}
+      <div
+        className={`drawer-backdrop ${mobileOpen ? 'drawer-backdrop--show' : ''}`}
+        onClick={() => setMobileOpen(false)}
+      />
+      <aside className={`drawer ${mobileOpen ? 'drawer--open' : ''}`} aria-hidden={!mobileOpen}>
+        <div className="drawer__head">
+          <span className="nav__logo-mark">EB</span>
           <button onClick={() => setMobileOpen(false)} aria-label="Menüyü kapat"><FaTimes /></button>
         </div>
-        <nav className="mobile-nav">
-          <Link to="/">Ana Sayfa</Link>
-          <Link to="/kurumsal">Kurumsal</Link>
-          <Link to="/urunler">Ürünlerimiz</Link>
-          <Link to="/hizmetler">Hizmetler</Link>
-          <Link to="/iletisim">İletişim</Link>
-          <div className="mobile-nav-actions">
-            <Link to="/iletisim" className="btn btn-red btn-lg" style={{ width: '100%' }}>Demo Talebi</Link>
-            <Link to="/iletisim" className="btn btn-outline-dark btn-lg" style={{ width: '100%' }}>Destek Talebi</Link>
+
+        <nav
+          className="drawer__nav"
+          onClick={(e) => {
+            if (e.target.closest('a')) closeMenus();
+          }}
+        >
+          <NavLink to="/" end>Ana Sayfa</NavLink>
+          <NavLink to="/kurumsal">Kurumsal</NavLink>
+
+          <button
+            className="drawer__expand"
+            onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+            aria-expanded={mobileProductsOpen}
+          >
+            Ürünler <FaChevronDown className={mobileProductsOpen ? 'rot' : ''} />
+          </button>
+          <div className={`drawer__sub ${mobileProductsOpen ? 'drawer__sub--open' : ''}`}>
+            {megaProducts.map((p) => (
+              <Link to={`/urunler/${p.id}`} key={p.id}>{p.name}</Link>
+            ))}
+            <Link to="/urunler" className="drawer__sub-all">Tüm Ürünler →</Link>
           </div>
+
+          <NavLink to="/hizmetler">Hizmetler</NavLink>
+          <NavLink to="/iletisim">İletişim</NavLink>
         </nav>
-        <div className="mobile-nav-footer">
-          <div className="social-links">
-            <a href="#"><FaFacebookF /></a>
-            <a href="#"><FaInstagram /></a>
-            <a href="#"><FaLinkedinIn /></a>
-            <a href="#"><FaYoutube /></a>
+
+        <div className="drawer__foot">
+          <Link to="/iletisim" className="btn btn-brand" style={{ width: '100%' }} onClick={closeMenus}>Demo Talep Et</Link>
+          <a href="tel:+908500000000" className="drawer__phone"><FaPhoneAlt /> 0 850 XXX XX XX</a>
+          <div className="drawer__social">
+            <a href="#" aria-label="Facebook"><FaFacebookF /></a>
+            <a href="#" aria-label="Instagram"><FaInstagram /></a>
+            <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
           </div>
-          <p>📞 0 850 XXX XX XX</p>
         </div>
-      </div>
+      </aside>
     </>
   );
 };

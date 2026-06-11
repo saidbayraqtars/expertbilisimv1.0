@@ -1,110 +1,127 @@
 import { useParams, Link } from 'react-router-dom';
 import { products } from '../data/products';
-import { FaArrowLeft, FaCheckCircle, FaArrowRight } from 'react-icons/fa';
+import { productIcons } from '../data/productIcons';
 import PageBanner from '../components/PageBanner';
+import CTA from '../components/CTA';
+import './pages.css';
+import '../components/Solutions.css';
+import {
+  FaArrowLeft, FaArrowRight, FaCheckCircle, FaHeadset,
+} from 'react-icons/fa';
 
 const UrunDetay = () => {
   const { slug } = useParams();
-  const product = products.find(p => p.id === slug);
+  const product = products.find((p) => p.id === slug);
 
   if (!product) {
     return (
       <>
-        <PageBanner title="Ürün Bulunamadı" />
-        <div className="container section" style={{ textAlign: 'center' }}>
+        <PageBanner title="Ürün Bulunamadı" breadcrumb="Ürünler" />
+        <div className="container section notfound">
           <h2>Aradığınız ürün sistemimizde mevcut değil.</h2>
-          <Link to="/urunler" className="btn btn-primary btn-pill" style={{ marginTop: '20px' }}>Ürünlere Dön</Link>
+          <Link to="/urunler" className="btn btn-brand">Ürünlere Dön</Link>
         </div>
       </>
     );
   }
 
+  const related = products
+    .filter((p) => p.id !== product.id)
+    .sort((a, b) => {
+      const aSame = a.category === product.category ? 0 : 1;
+      const bSame = b.category === product.category ? 0 : 1;
+      return aSame - bSame;
+    })
+    .slice(0, 3);
+
   return (
     <>
-      <PageBanner title={product.name} breadcrumb={product.category} />
+      <PageBanner
+        title={product.name}
+        breadcrumb={product.category}
+        subtitle={product.shortDescription}
+      />
 
       <section className="section">
         <div className="container">
-          <Link to="/urunler" className="btn-link" style={{ marginBottom: '2rem', display: 'inline-flex' }}>
+          <Link to="/urunler" className="link-arrow pd-back">
             <FaArrowLeft /> Tüm Ürünler
           </Link>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'flex-start', marginTop: '1rem' }}>
-            {/* Product Visual */}
-            <div className="reveal" style={{
-              flex: '1 1 400px',
-              background: product.gradient,
-              minHeight: '400px',
-              borderRadius: 'var(--radius-lg)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              padding: '3rem',
-              position: 'relative',
-              overflow: 'hidden'
-            }}>
-              <div style={{
-                position: 'absolute',
-                top: '-20%',
-                right: '-20%',
-                width: '300px',
-                height: '300px',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)',
-                pointerEvents: 'none'
-              }} />
-              <span style={{
-                padding: '5px 16px',
-                background: 'rgba(255,255,255,0.2)',
-                borderRadius: 'var(--radius-full)',
-                fontSize: '0.8rem',
-                fontWeight: '600',
-                marginBottom: '1rem',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-              }}>{product.category}</span>
-              <h2 style={{ color: 'white', fontSize: '2.75rem', textAlign: 'center', fontWeight: '800' }}>{product.name}</h2>
+          <div className="pd-layout">
+            <div className="pd-content reveal">
+              <h2 style={{ marginTop: 0 }}>Ürün Hakkında</h2>
+              <p>{product.fullDescription}</p>
+
+              <h2>Öne Çıkan Özellikler</h2>
+              <div className="pd-features">
+                {product.features.map((f) => (
+                  <div className="pd-feature" key={f}>
+                    <FaCheckCircle /> {f}
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Product Info */}
-            <div className="reveal delay-1" style={{ flex: '1 1 500px' }}>
-              <span className="section-label">{product.category}</span>
-              <h1 style={{ fontSize: '2.5rem', marginBottom: '1.5rem', color: 'var(--color-heading)', fontWeight: '800' }}>{product.name}</h1>
-              <p style={{ fontSize: '1.15rem', lineHeight: '1.8', color: 'var(--color-text)', marginBottom: '2.5rem' }}>
-                {product.fullDescription}
-              </p>
-
-              <h3 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>Öne Çıkan Özellikler</h3>
-              <ul style={{ listStyle: 'none', padding: 0, marginBottom: '2.5rem' }}>
-                {product.features.map((feature, idx) => (
-                  <li key={idx} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '12px 0',
-                    borderBottom: '1px solid var(--color-border)',
-                    fontSize: '1.05rem'
-                  }}>
-                    <FaCheckCircle style={{ color: 'var(--color-accent)', flexShrink: 0 }} />
-                    <span style={{ color: 'var(--color-heading)', fontWeight: '500' }}>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                <Link to="/iletisim" className="btn btn-primary btn-lg btn-pill">
-                  Bilgi & Teklif Al <FaArrowRight />
-                </Link>
-                <Link to="/iletisim" className="btn btn-outline-dark btn-lg btn-pill">
-                  Demo Talebi
-                </Link>
+            <aside className="pd-aside reveal delay-1">
+              <div className="pd-card" style={{ '--pd-accent': product.accent }}>
+                <div
+                  className="pd-card__icon"
+                  style={{ background: `${product.accent}26`, color: product.accent }}
+                >
+                  {productIcons[product.icon]}
+                </div>
+                <span className="pd-card__cat">{product.category}</span>
+                <h3>{product.name}</h3>
+                <p>İşletmenize uygunluğunu birlikte değerlendirelim, size özel teklif hazırlayalım.</p>
+                <div className="pd-card__actions">
+                  <Link to="/iletisim" className="btn btn-brand">
+                    Demo Talep Et <FaArrowRight />
+                  </Link>
+                  <Link to="/iletisim" className="btn btn-ghost">
+                    Fiyat Teklifi Al
+                  </Link>
+                </div>
               </div>
+
+              <div className="pd-support">
+                <FaHeadset />
+                <div>
+                  <strong>Kurulum + eğitim + 7/24 destek</strong>
+                  <small>Tüm Vega ürünlerinde Expert Bilişim güvencesi</small>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          <div className="pd-related">
+            <h2>İlginizi Çekebilecek Diğer Ürünler</h2>
+            <div className="pd-related__grid">
+              {related.map((p, i) => (
+                <Link
+                  to={`/urunler/${p.id}`}
+                  className={`product-card reveal delay-${i}`}
+                  key={p.id}
+                  style={{ '--accent': p.accent }}
+                >
+                  <div className="product-card__top">
+                    <span className="product-card__icon">{productIcons[p.icon]}</span>
+                    <span className="product-card__cat">{p.category}</span>
+                  </div>
+                  <h3>{p.name}</h3>
+                  <p>{p.shortDescription}</p>
+                  <div className="product-card__foot">
+                    <span className="product-card__count">{p.features.length} temel özellik</span>
+                    <span className="product-card__go">İncele <FaArrowRight /></span>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
       </section>
+
+      <CTA />
     </>
   );
 };

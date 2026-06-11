@@ -1,48 +1,61 @@
-.clients {
-  overflow: hidden;
+/* ── Brand marquee strip ── */
+.brands {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 26px 0;
 }
 
-.clients-track {
-  overflow: hidden;
-  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-}
-
-.clients-slide {
-  display: flex;
-  gap: 2rem;
-  animation: marquee 30s linear infinite;
-  width: max-content;
-}
-
-.client-item {
+.brands__inner {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 1.25rem 2.5rem;
-  background: var(--color-bg-light);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  min-width: 180px;
-  transition: var(--transition);
+  gap: 32px;
 }
 
-.client-item span {
-  font-family: var(--font-heading);
+.brands__label {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-mute);
+  padding-right: 32px;
+  border-right: 1px solid var(--border);
+}
+
+.brands__track {
+  flex: 1;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.brands__slide {
+  display: flex;
+  width: max-content;
+  gap: 56px;
+  animation: marquee 28s linear infinite;
+}
+
+.brands__track:hover .brands__slide {
+  animation-play-state: paused;
+}
+
+.brands__item {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
   font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--color-primary);
+  color: #b9c8c1;
   white-space: nowrap;
-  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
 }
 
-.client-item:hover {
-  border-color: var(--color-accent);
-  background: white;
-  box-shadow: var(--shadow-sm);
+.brands__item:hover {
+  color: var(--brand-500);
 }
 
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@media (max-width: 768px) {
+  .brands__label {
+    display: none;
+  }
 }

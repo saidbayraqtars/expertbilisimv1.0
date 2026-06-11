@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
@@ -9,52 +10,46 @@ import Urunler from './pages/Urunler';
 import UrunDetay from './pages/UrunDetay';
 import Hizmetler from './pages/Hizmetler';
 import Iletisim from './pages/Iletisim';
-import { useEffect } from 'react';
 
-// Layout wrapper - no extra padding on home page (hero is full viewport)
-const Layout = ({ children }) => {
-  const location = useLocation();
-  const isHome = location.pathname === '/';
-
-  return (
-    <main style={{ minHeight: '80vh', paddingTop: isHome ? '0' : '0' }}>
-      {children}
-    </main>
-  );
-};
+const REVEAL_SELECTOR = '.reveal, .reveal-left, .reveal-right, .reveal-scale';
 
 function App() {
-  // Global scroll reveal logic
+  // Scroll reveal: IntersectionObserver for visibility, MutationObserver to
+  // pick up elements added after route changes.
   useEffect(() => {
-    const revealFunction = () => {
-      const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-      const windowHeight = window.innerHeight;
-      const elementVisible = 50;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
 
-      reveals.forEach((element) => {
-        const elementTop = element.getBoundingClientRect().top;
-        if (elementTop < windowHeight - elementVisible) {
-          element.classList.add('active');
-        }
+    const observeAll = () => {
+      document.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
+        if (!el.classList.contains('active')) io.observe(el);
       });
     };
 
-    window.addEventListener('scroll', revealFunction);
-    revealFunction(); // initial trigger
+    observeAll();
 
-    const observer = new MutationObserver(revealFunction);
-    observer.observe(document.body, { childList: true, subtree: true });
+    const mo = new MutationObserver(observeAll);
+    mo.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      window.removeEventListener('scroll', revealFunction);
-      observer.disconnect();
+      io.disconnect();
+      mo.disconnect();
     };
   }, []);
 
   return (
     <Router>
       <Navbar />
-      <Layout>
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/kurumsal" element={<Kurumsal />} />
@@ -63,7 +58,7 @@ function App() {
           <Route path="/hizmetler" element={<Hizmetler />} />
           <Route path="/iletisim" element={<Iletisim />} />
         </Routes>
-      </Layout>
+      </main>
       <Footer />
       <WhatsAppButton />
       <ScrollToTopButton />

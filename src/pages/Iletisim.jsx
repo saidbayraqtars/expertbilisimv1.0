@@ -2,24 +2,45 @@ import { useState } from 'react';
 import PageBanner from '../components/PageBanner';
 import './pages.css';
 import {
-  FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock,
-  FaPaperPlane, FaCheckCircle,
+  FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock, FaWhatsapp,
 } from 'react-icons/fa';
 
 const initialForm = { name: '', email: '', phone: '', subject: '', message: '' };
 
+const subjectLabels = {
+  demo: 'Demo Talebi',
+  destek: 'Destek Talebi',
+  teklif: 'Fiyat Teklifi',
+  diger: 'Diğer',
+};
+
+const WHATSAPP_NUMBER = '905461914055';
+
 const Iletisim = () => {
   const [formData, setFormData] = useState(initialForm);
-  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Form içeriğini WhatsApp mesajına çevirip wa.me üzerinden gönderir.
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 4000);
+    const lines = [
+      'Merhaba, web sitesi üzerinden ulaşıyorum.',
+      `Ad Soyad: ${formData.name}`,
+      `E-posta: ${formData.email}`,
+      formData.phone ? `Telefon: ${formData.phone}` : '',
+      `Konu: ${subjectLabels[formData.subject] || formData.subject}`,
+      '',
+      formData.message,
+    ].filter(Boolean);
+
+    window.open(
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`,
+      '_blank',
+      'noopener,noreferrer'
+    );
     setFormData(initialForm);
   };
 
@@ -39,7 +60,7 @@ const Iletisim = () => {
                 <div className="contact-card__icon"><FaMapMarkerAlt /></div>
                 <div>
                   <h4>Adres</h4>
-                  <p>Samsun Merkez, Türkiye</p>
+                  <p>Liman Mah. Göremen Sok. No:1<br />İlkadım / Samsun</p>
                 </div>
               </div>
               <div className="contact-card reveal delay-1">
@@ -47,8 +68,7 @@ const Iletisim = () => {
                 <div>
                   <h4>Telefon</h4>
                   <p>
-                    <a href="tel:+908500000000">0 850 XXX XX XX</a><br />
-                    <a href="tel:+903620000000">0 362 XXX XX XX</a>
+                    <a href="tel:+905461914055">0546 191 40 55</a>
                   </p>
                 </div>
               </div>
@@ -56,7 +76,7 @@ const Iletisim = () => {
                 <div className="contact-card__icon"><FaEnvelope /></div>
                 <div>
                   <h4>E-Posta</h4>
-                  <p><a href="mailto:info@expertbilisim.com.tr">info@expertbilisim.com.tr</a></p>
+                  <p><a href="mailto:hakan@expertbilisim.com.tr">hakan@expertbilisim.com.tr</a></p>
                 </div>
               </div>
               <div className="contact-card reveal delay-3">
@@ -70,13 +90,7 @@ const Iletisim = () => {
 
             <form className="contact-form reveal delay-1" onSubmit={handleSubmit}>
               <h3>Bize Yazın</h3>
-              <p>Formu doldurun, ekibimiz en kısa sürede sizinle iletişime geçsin.</p>
-
-              {submitted && (
-                <div className="form-success" role="status">
-                  <FaCheckCircle /> Mesajınız gönderildi! En kısa sürede dönüş yapacağız.
-                </div>
-              )}
+              <p>Formu doldurun, mesajınız WhatsApp üzerinden bize ulaşsın.</p>
 
               <div className="contact-form__row">
                 <input
@@ -134,7 +148,7 @@ const Iletisim = () => {
               />
 
               <button type="submit" className="btn btn-brand btn-lg" style={{ width: '100%' }}>
-                <FaPaperPlane /> Mesajı Gönder
+                <FaWhatsapp /> WhatsApp ile Gönder
               </button>
             </form>
           </div>
@@ -142,7 +156,7 @@ const Iletisim = () => {
           <div className="contact-map reveal">
             <iframe
               title="Expert Bilişim Konum"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d95968.46858974498!2d36.2455!3d41.2867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4088611b55ef1b3d%3A0x6a91f6aa6fa63a2!2sSamsun%2C%20Turkey!5e0!3m2!1str!2str!4v1711880000000"
+              src="https://www.google.com/maps?q=Liman+Mahallesi+G%C3%B6remen+Sokak+No:1+%C4%B0lkad%C4%B1m+Samsun&output=embed"
               width="100%"
               height="420"
               style={{ border: 0, display: 'block' }}

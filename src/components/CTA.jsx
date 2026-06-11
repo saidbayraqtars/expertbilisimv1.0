@@ -20,8 +20,8 @@ const CTA = () => {
             <Link to="/iletisim" className="btn btn-amber btn-lg">
               Ücretsiz Demo Talep Et <FaArrowRight />
             </Link>
-            <a href="tel:+908500000000" className="btn btn-ghost btn-lg">
-              <FaPhoneAlt /> 0 850 XXX XX XX
+            <a href="tel:+905461914055" className="btn btn-ghost btn-lg">
+              <FaPhoneAlt /> 0546 191 40 55
             </a>
           </div>
         </div>

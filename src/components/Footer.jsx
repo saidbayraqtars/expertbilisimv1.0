@@ -63,9 +63,9 @@ const Footer = () => {
         <div className="footer__col footer__contact">
           <h4>İletişim</h4>
           <ul>
-            <li><FaMapMarkerAlt /> <span>Samsun Merkez, Türkiye</span></li>
-            <li><FaPhoneAlt /> <a href="tel:+908500000000">0 850 XXX XX XX</a></li>
-            <li><FaEnvelope /> <a href="mailto:info@expertbilisim.com.tr">info@expertbilisim.com.tr</a></li>
+            <li><FaMapMarkerAlt /> <span>Liman Mah. Göremen Sok. No:1, İlkadım / Samsun</span></li>
+            <li><FaPhoneAlt /> <a href="tel:+905461914055">0546 191 40 55</a></li>
+            <li><FaEnvelope /> <a href="mailto:hakan@expertbilisim.com.tr">hakan@expertbilisim.com.tr</a></li>
             <li><FaClock /> <span>Hafta içi 09:00–18:00 · Cmt 09:00–15:00</span></li>
           </ul>
           <Link to="/iletisim" className="btn btn-brand btn-sm footer__cta">

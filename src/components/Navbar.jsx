@@ -95,9 +95,9 @@ const Navbar = () => {
           </nav>
 
           <div className="nav__actions">
-            <a href="tel:+908500000000" className="nav__phone">
+            <a href="tel:+905461914055" className="nav__phone">
               <FaPhoneAlt />
-              <span>0 850 XXX XX XX</span>
+              <span>0546 191 40 55</span>
             </a>
             <Link to="/iletisim" className="btn btn-brand btn-sm">Demo Talep Et</Link>
           </div>
@@ -152,7 +152,7 @@ const Navbar = () => {
 
         <div className="drawer__foot">
           <Link to="/iletisim" className="btn btn-brand" style={{ width: '100%' }} onClick={closeMenus}>Demo Talep Et</Link>
-          <a href="tel:+908500000000" className="drawer__phone"><FaPhoneAlt /> 0 850 XXX XX XX</a>
+          <a href="tel:+905461914055" className="drawer__phone"><FaPhoneAlt /> 0546 191 40 55</a>
           <div className="drawer__social">
             <a href="#" aria-label="Facebook"><FaFacebookF /></a>
             <a href="#" aria-label="Instagram"><FaInstagram /></a>

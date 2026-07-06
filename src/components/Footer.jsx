@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import Logo from './Logo';
 import {
   FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube,
   FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock, FaArrowRight,
@@ -27,8 +28,7 @@ const Footer = () => {
       <div className="container footer__top">
         <div className="footer__brand">
           <Link to="/" className="footer__logo">
-            <span className="footer__logo-mark">EB</span>
-            <span className="footer__logo-text">Expert<em>Bilişim</em></span>
+            <Logo />
           </Link>
           <p>
             Vega Yazılım Samsun Bölge Temsilcisi. ERP, muhasebe, perakende, restoran ve
@@ -65,7 +65,7 @@ const Footer = () => {
           <ul>
             <li><FaMapMarkerAlt /> <span>Liman Mah. Göremen Sok. No:1, İlkadım / Samsun</span></li>
             <li><FaPhoneAlt /> <a href="tel:+905461914055">0546 191 40 55</a></li>
-            <li><FaEnvelope /> <a href="mailto:hakan@expertbilisim.com.tr">hakan@expertbilisim.com.tr</a></li>
+            <li><FaEnvelope /> <a href="mailto:info@expertbilisim.com.tr">info@expertbilisim.com.tr</a></li>
             <li><FaClock /> <span>Hafta içi 09:00–18:00 · Cmt 09:00–15:00</span></li>
           </ul>
           <Link to="/iletisim" className="btn btn-brand btn-sm footer__cta">

@@ -15,33 +15,8 @@
 .footer__logo {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
   margin-bottom: 18px;
-}
-
-.footer__logo-mark {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--brand-500), var(--brand-400));
   color: #fff;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.footer__logo-text {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: #fff;
-}
-
-.footer__logo-text em {
-  font-style: normal;
-  color: var(--brand-300);
 }
 
 .footer__brand p {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import './Navbar.css';
+import Logo from './Logo';
 import { products } from '../data/products';
 import { productIcons } from '../data/productIcons';
 import {
@@ -47,11 +48,7 @@ const Navbar = () => {
       <header className={`nav ${scrolled ? 'nav--solid' : ''}`}>
         <div className="container-wide nav__inner">
           <Link to="/" className="nav__logo" aria-label="Expert Bilişim ana sayfa">
-            <span className="nav__logo-mark">EB</span>
-            <span className="nav__logo-text">
-              Expert<em>Bilişim</em>
-              <small>Vega Yazılım Bölge Temsilcisi</small>
-            </span>
+            <Logo tagline />
           </Link>
 
           <nav className="nav__links" aria-label="Ana menü">
@@ -119,7 +116,7 @@ const Navbar = () => {
       />
       <aside className={`drawer ${mobileOpen ? 'drawer--open' : ''}`} aria-hidden={!mobileOpen}>
         <div className="drawer__head">
-          <span className="nav__logo-mark">EB</span>
+          <Logo />
           <button onClick={() => setMobileOpen(false)} aria-label="Menüyü kapat"><FaTimes /></button>
         </div>
 

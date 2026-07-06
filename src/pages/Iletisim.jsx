@@ -76,7 +76,7 @@ const Iletisim = () => {
                 <div className="contact-card__icon"><FaEnvelope /></div>
                 <div>
                   <h4>E-Posta</h4>
-                  <p><a href="mailto:hakan@expertbilisim.com.tr">hakan@expertbilisim.com.tr</a></p>
+                  <p><a href="mailto:info@expertbilisim.com.tr">info@expertbilisim.com.tr</a></p>
                 </div>
               </div>
               <div className="contact-card reveal delay-3">

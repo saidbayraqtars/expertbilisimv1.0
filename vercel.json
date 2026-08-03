@@ -2,11 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
-      "//": "panel.expertbilisim.com.tr → Vega yönetim paneli (Cloudflare Worker). Yalnız bu host için çalışır; expertbilisim.com.tr ve www etkilenmez.",
       "source": "/(.*)",
       "has": [{ "type": "host", "value": "panel.expertbilisim.com.tr" }],
       "destination": "https://vega-panel.expertbilisim.workers.dev/$1",
-      "//permanent": "302 (geçici) — tarayıcı önbelleğe almasın. Panel adresi kesinleşince true yapılabilir.",
       "permanent": false
     }
   ]

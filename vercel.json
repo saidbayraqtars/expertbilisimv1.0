@@ -1,11 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "redirects": [
+  "rewrites": [
     {
       "source": "/(.*)",
       "has": [{ "type": "host", "value": "panel.expertbilisim.com.tr" }],
-      "destination": "https://vega-panel.expertbilisim.workers.dev/$1",
-      "permanent": false
+      "destination": "https://vega-panel.expertbilisim.workers.dev/$1"
     }
   ]
 }

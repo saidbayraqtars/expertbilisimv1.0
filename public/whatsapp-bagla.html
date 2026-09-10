@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>WhatsApp Numaranı Bağla | Expert Bilişim — Vega WhatsApp</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<style>
+:root{--ink:#0f1f1a;--muted:#4a5d56;--line:#dce7e2;--bg:#f6faf8;--brand:#128a68;--err:#b42318}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:#07120e}
+.bar{max-width:720px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;gap:10px}
+header a{color:#fff;text-decoration:none;font-weight:700;font-size:18px;display:flex;align-items:center;gap:10px}
+main{max-width:720px;margin:0 auto;padding:40px 24px 64px}
+h1{font-size:28px;line-height:1.25;margin:0 0 8px}
+p{color:#22332d}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;margin:24px 0}
+ol{padding-left:22px;margin:0}
+li{margin:6px 0}
+button{appearance:none;border:0;border-radius:999px;background:#1877f2;color:#fff;font:600 16px/1 inherit;padding:15px 26px;cursor:pointer}
+button:disabled{opacity:.55;cursor:default}
+#status{margin-top:18px;padding:14px 16px;border-radius:10px;background:#eef5f2;white-space:pre-line}
+#status.err{background:#fdecea;color:var(--err)}
+#status.ok{background:#e6f6ee;color:#0b5d3f}
+#status:empty{display:none}
+.muted{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<header><div class="bar"><a href="/"><svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true"><polygon points="8,6 16.5,6 10,34 1.5,34" fill="#22de86"/><polygon points="19.5,6 28,6 21.5,34 13,34" fill="#12bfc0"/><polygon points="31,6 39.5,6 33,34 24.5,34" fill="#0c9dd8"/></svg>Expert Bilişim</a></div></header>
+<main>
+<h1>WhatsApp numaranı Vega'ya bağla</h1>
+<p>Bu adım işletmenizin WhatsApp Business hesabını Meta'nın resmî altyapısı üzerinden Vega WhatsApp uygulamanıza bağlar. Şifrenizi biz görmeyiz; onayı doğrudan Meta'nın penceresinde verirsiniz.</p>
+
+<div class="card">
+<ol>
+<li>Aşağıdaki düğmeye basın, Meta (Facebook) penceresi açılır.</li>
+<li>İşletmenizi, WhatsApp Business hesabınızı ve telefon numaranızı seçin ya da oluşturun.</li>
+<li>İzinleri onaylayın. Pencere kapanınca bağlantı otomatik tamamlanır.</li>
+</ol>
+<p style="margin:22px 0 0"><button id="connect" disabled>WhatsApp'ı bağla</button></p>
+<div id="status">Hazırlanıyor…</div>
+</div>
+
+<p class="muted">Sorun yaşarsanız: <a href="mailto:info@expertbilisim.com.tr">info@expertbilisim.com.tr</a> · 0546 191 40 55 · <a href="/gizlilik.html">Gizlilik Politikası</a></p>
+</main>
+
+<script>
+// Meta Embedded Signup — fbsamples/business-messaging-sample-tech-provider-app akışının sadeleştirilmiş hali.
+// FB.login bir KOD döndürür; oturum bilgisi (waba_id, phone_number_id) ayrıca postMessage ile gelir.
+// İkisi de gelince kod, Vega sunucusunda anahtarla değiştirilir (App Secret yalnız sunucuda).
+var APP_ID = '1059549726935115';
+var CONFIG_ID = '2586866615079678';
+var GRAPH_VERSION = 'v23.0';
+// workers.dev Türkiye'de DPI ile engelli → aynı alan adındaki vekil yol (middleware.js).
+var ONBOARD_URL = '/wa-api/onboard';
+
+var ticket = new URLSearchParams(location.search).get('t') || '';
+var btn = document.getElementById('connect');
+var box = document.getElementById('status');
+var code = null, session = null, sent = false;
+
+function show(text, kind) { box.textContent = text; box.className = kind || ''; }
+
+if (!ticket) {
+  show('Bu sayfa Vega WhatsApp uygulamasındaki "WhatsApp numaranı bağla" düğmesiyle açılmalıdır (bağlantı bileti eksik).', 'err');
+}
+
+window.fbAsyncInit = function () {
+  FB.init({ appId: APP_ID, autoLogAppEvents: true, xfbml: true, version: GRAPH_VERSION });
+  if (ticket) { btn.disabled = false; show(''); }
+};
+
+window.addEventListener('message', function (ev) {
+  if (!/(^|\.)facebook\.com$/.test(new URL(ev.origin).hostname)) return;
+  var data;
+  try { data = JSON.parse(ev.data); } catch (e) { return; }
+  if (!data || data.type !== 'WA_EMBEDDED_SIGNUP') return;
+  if (data.event === 'CANCEL') {
+    var step = data.data && data.data.current_step ? ' (adım: ' + data.data.current_step + ')' : '';
+    show('Bağlantı yarıda bırakıldı' + step + '. Tekrar deneyebilirsiniz.', 'err');
+    btn.disabled = false;
+    return;
+  }
+  if (data.event === 'ERROR') {
+    show('Meta hata bildirdi: ' + ((data.data && data.data.error_message) || 'bilinmiyor'), 'err');
+    btn.disabled = false;
+    return;
+  }
+  if (data.event && data.event.indexOf('FINISH') === 0) { session = data.data || {}; maybeSend(); }
+});
+
+btn.addEventListener('click', function () {
+  code = null; session = null; sent = false;
+  btn.disabled = true;
+  show('Meta penceresi açıldı — adımları tamamlayın…');
+  FB.login(function (resp) {
+    if (resp && resp.authResponse && resp.authResponse.code) { code = resp.authResponse.code; maybeSend(); }
+    else if (!session) { show('Pencere kapatıldı, bağlantı tamamlanmadı.', 'err'); btn.disabled = false; }
+  }, {
+    config_id: CONFIG_ID,
+    response_type: 'code',
+    override_default_response_type: true,
+    extras: { setup: {}, sessionInfoVersion: '3' }
+  });
+});
+
+function maybeSend() {
+  if (sent || !code || !session) return;
+  sent = true;
+  show('Bağlanıyor… (anahtar alınıyor, numara kaydediliyor)');
+  fetch(ONBOARD_URL, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      ticket: ticket, code: code,
+      wabaId: session.waba_id || '', phoneNumberId: session.phone_number_id || '', businessId: session.business_id || ''
+    })
+  }).then(function (r) { return r.json().catch(function () { return { success: false, error: 'HTTP ' + r.status }; }); })
+    .then(function (j) {
+      if (!j.success) { show('Bağlanamadı: ' + (j.message || j.error || 'bilinmeyen hata'), 'err'); btn.disabled = false; sent = false; return; }
+      var lines = ['✓ WhatsApp hesabı bağlandı.'];
+      (j.numbers || []).forEach(function (n) { lines.push('Numara: ' + (n.display_number || n.phone_number_id)); });
+      if (j.register && !j.register.ok) lines.push('Not: numara kaydı tamamlanmadı — ' + j.register.error);
+      if (j.subscribe && !j.subscribe.ok) lines.push('Not: webhook aboneliği tamamlanmadı — ' + j.subscribe.error);
+      lines.push('Bu pencereyi kapatıp Vega WhatsApp uygulamasına dönebilirsiniz.');
+      show(lines.join('\n'), 'ok');
+    })
+    .catch(function (e) { show('Sunucuya ulaşılamadı: ' + e.message, 'err'); btn.disabled = false; sent = false; });
+}
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+</body>
+</html>

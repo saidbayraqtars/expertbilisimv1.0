@@ -27,9 +27,16 @@ export const config = {
 const PANEL_HOST = 'panel.expertbilisim.com.tr';
 const PANEL_ORIGIN = 'https://vega-panel.expertbilisim.workers.dev';
 
+// WhatsApp bağlama sayfası (public/whatsapp-bagla.html) müşterinin tarayıcısında
+// çalışır → workers.dev'e doğrudan gidemez (aynı DPI engeli). Yalnız bu TEK uç
+// vekil edilir; Worker'ın geri kalanı bu alan adından erişilemez.
+const KONTOR_ORIGIN = 'https://vega-kontor.expertbilisim.workers.dev';
+const WA_ONBOARD_PATH = '/wa-api/onboard';
+
 export default function middleware(request) {
     try {
         const url = new URL(request.url);
+        if (url.pathname === WA_ONBOARD_PATH) return rewrite(new URL('/v1/wa/onboard', KONTOR_ORIGIN));
         if (url.hostname.toLowerCase() !== PANEL_HOST) return next();
         return rewrite(new URL(url.pathname + url.search, PANEL_ORIGIN));
     } catch {

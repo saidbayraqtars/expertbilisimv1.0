@@ -69,7 +69,11 @@ if (!ticket) {
 }
 
 window.fbAsyncInit = function () {
-  FB.init({ appId: APP_ID, autoLogAppEvents: true, xfbml: true, version: GRAPH_VERSION });
+  // fedCM:false ŞART. Meta bu uygulamada FedCM'yi varsayılan açtı (app_config: fedcm.default=true).
+  // Chrome'da facebook.com oturumu FedCM'ye görünmezse ("Provider's accounts list is empty")
+  // SDK açılır pencereye düşer ama artık tıklama anında olmadığı için Chrome pencereyi engeller
+  // → akış sessizce takılır. Açıkça kapatınca FB.login pencereyi doğrudan tıklamayla açar.
+  FB.init({ appId: APP_ID, autoLogAppEvents: true, xfbml: true, version: GRAPH_VERSION, fedCM: false });
   if (ticket) { btn.disabled = false; show(''); }
 };
 

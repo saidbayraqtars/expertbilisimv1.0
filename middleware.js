@@ -33,10 +33,20 @@ const PANEL_ORIGIN = 'https://vega-panel.expertbilisim.workers.dev';
 const KONTOR_ORIGIN = 'https://vega-kontor.expertbilisim.workers.dev';
 const WA_ONBOARD_PATH = '/wa-api/onboard';
 
+// Vega WhatsApp uygulamasının lisans uçları. workers.dev'in engelli olduğu ağlarda
+// uygulama bu adrese düşer (server/license.js REMOTE_BASES). YALNIZ bu iki uç
+// vekil edilir; kontör/WA uçları buradan açılmaz.
+const LICENSE_PATHS = {
+    '/lisans-api/v1/license': '/v1/license',
+    '/lisans-api/v1/license/register': '/v1/license/register',
+};
+
 export default function middleware(request) {
     try {
         const url = new URL(request.url);
         if (url.pathname === WA_ONBOARD_PATH) return rewrite(new URL('/v1/wa/onboard', KONTOR_ORIGIN));
+        const lic = LICENSE_PATHS[url.pathname];
+        if (lic) return rewrite(new URL(lic + url.search, KONTOR_ORIGIN));
         if (url.hostname.toLowerCase() !== PANEL_HOST) return next();
         return rewrite(new URL(url.pathname + url.search, PANEL_ORIGIN));
     } catch {
